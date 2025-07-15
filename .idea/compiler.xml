@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="procedure" />
         <module name="common" />
         <module name="provider" />
         <module name="consumer" />
@@ -18,6 +19,7 @@
       <module name="Rabbitmq" options="" />
       <module name="common" options="-parameters" />
       <module name="consumer" options="-parameters" />
+      <module name="procedure" options="-parameters" />
       <module name="provider" options="-parameters" />
     </option>
   </component>

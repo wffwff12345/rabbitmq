@@ -1,9 +1,13 @@
 package com.example.config;
 
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.SerializerMessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  * @ClassName RabbitmqConfig
@@ -49,5 +53,12 @@ public class RabbitmqConfig {
                                           @Qualifier(EXCHANGE_TOPICS_INFORM) Exchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTINGKEY_SMS).noargs();
     }
-
+    @Bean
+    @Scope("prototype")//通知Spring把被注解的Bean变成多例 表示每次获得bean都会生成一个新的对象
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMandatory(true);
+        template.setMessageConverter(new SerializerMessageConverter());
+        return template;
+    }
 }

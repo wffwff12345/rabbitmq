@@ -3,23 +3,16 @@ package com.example.service.serviceImpl;
 import com.example.config.RabbitmqConfig;
 import com.example.entity.User;
 import com.example.service.ConfirmCallbackService;
-import com.example.service.ProviderMqService;
+import com.example.service.ProcedureMqService;
 import com.example.service.ReturnCallbackService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.UUID;
-
 @Service
-public class ProviderMqServiceImpl implements ProviderMqService {
-    @Autowired
-    RedisTemplate redisTemplate;
+public class ProcedureMqServiceImpl implements ProcedureMqService {
     //使用rabbitTemplate发送消息
     @Autowired
     RabbitTemplate rabbitTemplate;
@@ -28,10 +21,7 @@ public class ProviderMqServiceImpl implements ProviderMqService {
     @Autowired
     ReturnCallbackService returnCallbackService;
 
-    @PostConstruct
-    public void init() {
-
-    }
+    @Autowired
     @Override
     public void SendMessage(String message) throws JsonProcessingException {
         /**
@@ -57,12 +47,8 @@ public class ProviderMqServiceImpl implements ProviderMqService {
          * 2、routingKey
          * 3、消息内容
          */
-
-        Object stocks = redisTemplate.boundValueOps("stock").get();
-        System.out.println(stocks);
-        //ObjectMapper objectMapper = new ObjectMapper();
-        //rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, "inform.email",objectMapper.writeValueAsString(new User("jack","12"))+message,new CorrelationData(UUID.randomUUID().toString()));
+        ObjectMapper objectMapper = new ObjectMapper();
+        rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, "inform.email",objectMapper.writeValueAsString(new User("jack","12")+message) );
 
     }
-
 }

@@ -12,6 +12,7 @@
         <module>consumer</module>
         <module>provider</module>
         <module>common</module>
+        <module>procedure</module>
     </modules>
 
     <parent>
